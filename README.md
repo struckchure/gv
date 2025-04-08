@@ -8,61 +8,80 @@
 
 ### ✨ Features
 
-- ✅ Native ESM support in modern browsers
-- ✅ CDN-based module fetching (e.g., `esm.sh`, `skypack`)
-- ✅ Local caching of remote modules
-- ✅ Hot Module Replacement (HMR)
-- ✅ Zero-config dev server
-- ✅ `esbuild`-based fast transpilation
-- ✅ Plugin system (inspired by Vite/Rollup)
-- ✅ Written in Go with extensibility in mind
-- ✅ No Node.js required — ever
+- [x] Native ESM support in modern browsers
+- [x] CDN-based module fetching (e.g., `esm.sh`, `skypack`)
+- [ ] Local caching of remote modules
+- [ ] Hot Module Replacement (HMR)
+- [x] Zero-config dev server
+- [ ] `esbuild`-based transpilation
+- [x] `babel`-based transpilation
+- [x] Plugin system (inspired by Vite/Rollup)
+- [x] Written in Go with extensibility in mind
+- [x] No Node.js required — ever
+- [ ] TypeScript support
+- [ ] Adapter to support any http server
 
 ---
 
 ### 🔧 Getting Started
 
 ```bash
-git clone https://github.com/yourusername/gv
-cd gv
-go run ./cmd/gv dev
+git clone https://github.com/struckchure/gv
+cd gv/examples/react
+go run .
 ```
 
-Then open your browser to [http://localhost:3000](http://localhost:3000) and enjoy instant updates.
+Then open your browser to [http://localhost:3000](http://localhost:3000).
 
 ---
 
 ### 📦 How It Works
 
-- 📜 **Transpiling**: Uses `esbuild` internally for `.ts`, `.jsx`, `.tsx`, etc.
+- 📜 **Transpiling**: Uses `babel` internally for `.ts`, `.jsx`, `.tsx`, etc.
 - 🌐 **CDN Resolution**: Bare imports (like `react`) are rewritten to point to `https://esm.sh/react` and cached locally.
 - 🔥 **HMR**: WebSocket server pushes updates to the browser with minimal reloads.
 - 🧩 **Plugins**: Extend GV with hooks like `transform`, `resolveId`, and `load`.
 
 ---
 
-### 📁 Example Project Structure
+### 📁 Project Structure
+
+Well, your project structure can be anyhow you want, but here's a sample react project
 
 ```
-my-app/
+.
 ├── index.html
-├── main.ts
-└── components/
-    └── Hello.tsx
+├── main.go
+├── main.jsx
+├── router.js
+└── routes
+    ├── layout.jsx
+    ├── login
+    │   └── page.jsx
+    ├── page.jsx
+    └── register
+        └── page.jsx
 ```
 
 Import from CDNs or local files directly:
 
-```ts
-import React from "react";
-import Hello from "./components/Hello.tsx";
+```jsx
+import { createRoot } from "https://esm.sh/react-dom@19.1.0/client";
+import { RouterProvider } from "https://esm.sh/react-router@7.5.0";
+import React from "https://esm.sh/react@19.1.0";
+
+import { router } from "./router.js";
+
+createRoot(document.getElementById("root")).render(
+  <RouterProvider router={router} />
+);
 ```
 
 ---
 
 ### 🔌 Plugin API
 
-Coming soon!
+Check [here](./docs/writing-your-own-gv-plugin.md).
 
 ---
 

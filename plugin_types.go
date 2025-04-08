@@ -63,6 +63,6 @@ func (p *PluginBase) Transform(ctx *Context, code, id string) (*TransformResult,
 	return &TransformResult{Code: code}, nil
 }
 
-func (p *PluginBase) HandleHotUpdate(ctx *Context, file string) error {
+func (p *PluginBase) HandleHotUpdate(file string) error {
 	return nil
 }
