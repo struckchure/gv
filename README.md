@@ -9,7 +9,7 @@
 ### ✨ Features
 
 - [x] Native ESM support in modern browsers
-- [x] CDN-based module fetching (e.g., `esm.sh`, `skypack`)
+- [ ] CDN-based module fetching (e.g., `esm.sh`, `skypack`)
 - [ ] Local caching of remote modules
 - [ ] Hot Module Replacement (HMR)
 - [x] Zero-config dev server
