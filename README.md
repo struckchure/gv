@@ -1,3 +1,4 @@
+[Discord](https://discord.gg/DzPC7D8T)
 ## 🚀 GV (Go Vite)
 
 **GV** is a blazing-fast, browser-native development server and build tool written in Go. It’s inspired by [Vite](https://vitejs.dev) but designed to run without Node.js, using the power of native ESM in modern browsers and CDN-based dependency resolution.
