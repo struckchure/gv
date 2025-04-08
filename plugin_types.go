@@ -26,6 +26,8 @@ type TransformResult struct {
 type Plugin interface {
 	Name() string
 
+	OnStart() error
+
 	// Called when resolving a module ID (bare imports, aliases, etc.)
 	ResolveId(ctx *Context, id string, importer string) (*ResolveResult, error)
 
@@ -36,13 +38,17 @@ type Plugin interface {
 	Transform(ctx *Context, code string, id string) (*TransformResult, error)
 
 	// Called during dev HMR updates
-	HandleHotUpdate(ctx *Context, filePath string) error
+	HandleHotUpdate(filePath string) error
 }
 
 type PluginBase struct{}
 
 func (p *PluginBase) Name() string {
 	return "anonymous"
+}
+
+func (p *PluginBase) OnStart() error {
+	return nil
 }
 
 func (p *PluginBase) ResolveId(ctx *Context, id, importer string) (*ResolveResult, error) {

@@ -4,12 +4,19 @@ go 1.24.1
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.2
+	github.com/fatih/color v1.18.0
+	github.com/fsnotify/fsnotify v1.9.0
+	github.com/jvatic/goja-babel v0.0.0-20250325111341-70c9fd548330
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/samber/lo v1.49.1
 )
 
 require (
 	github.com/andybalholm/cascadia v1.3.3 // indirect
+	github.com/dlclark/regexp2 v1.11.5 // indirect
+	github.com/dop251/goja v0.0.0-20250309171923-bcd7cc6bf64c // indirect
+	github.com/go-sourcemap/sourcemap v2.1.4+incompatible // indirect
+	github.com/google/pprof v0.0.0-20250302191652-9094ed2288e7 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -18,6 +25,6 @@ require (
 	golang.org/x/crypto v0.33.0 // indirect
 	golang.org/x/net v0.35.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
-	golang.org/x/text v0.22.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
 )

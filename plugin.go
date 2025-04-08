@@ -8,6 +8,16 @@ func NewPluginContainer(plugins ...Plugin) *PluginContainer {
 	return &PluginContainer{plugins}
 }
 
+func (pc *PluginContainer) OnStart() error {
+	for _, plugin := range pc.plugins {
+		err := plugin.OnStart()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (pc *PluginContainer) ResolveId(ctx *Context, id, importer string) (string, error) {
 	for _, plugin := range pc.plugins {
 		if result, err := plugin.ResolveId(ctx, id, importer); result != nil || err != nil {
@@ -38,4 +48,13 @@ func (pc *PluginContainer) Transform(ctx *Context, code string, id string) (*Tra
 		}
 	}
 	return result, nil
+}
+
+func (pc *PluginContainer) HandleHotUpdate(file string) error {
+	for _, plugin := range pc.plugins {
+		if err := plugin.HandleHotUpdate(file); err != nil {
+			return err
+		}
+	}
+	return nil
 }
