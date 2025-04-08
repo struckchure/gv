@@ -6,6 +6,11 @@
 
 ---
 
+### 💎 Philosophy
+We should be able to use JavaScript frameworks, without 'node' or any runtime, just your browser.
+
+---
+
 ### ✨ Features
 
 - [x] Native ESM support in modern browsers
