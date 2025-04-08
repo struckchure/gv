@@ -5,9 +5,7 @@ export default function Page() {
 
   return (
     <>
-      <head>
-        <title>Root</title>
-      </head>
+      <title>Root</title>
 
       <p>Root</p>
       <button onClick={() => setCount(count + 1)}>Count {count}</button>
