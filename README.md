@@ -15,16 +15,16 @@ We should be able to use JavaScript frameworks, without 'node' or any runtime, j
 ### ✨ Features
 
 - [x] Native ESM support in modern browsers
-- [ ] CDN-based module fetching (e.g., `esm.sh`, `skypack`)
+- [x] CDN-based module fetching (e.g., `esm.sh`, `skypack`)
 - [ ] Local caching of remote modules
 - [ ] Hot Module Replacement (HMR)
 - [x] Zero-config dev server
-- [ ] `esbuild`-based transpilation
+- [x] `esbuild`-based transpilation
 - [x] `babel`-based transpilation
 - [x] Plugin system (inspired by Vite/Rollup)
 - [x] Written in Go with extensibility in mind
 - [x] No Node.js required — ever
-- [ ] TypeScript support
+- [x] TypeScript support
 - [ ] Adapter to support any http server
 
 ---
