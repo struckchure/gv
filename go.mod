@@ -12,6 +12,7 @@ require (
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/samber/lo v1.49.1
 	github.com/spf13/cobra v1.9.1
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
