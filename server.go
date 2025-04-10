@@ -142,29 +142,24 @@ func (s *Server) Watch() {
 					}
 
 					if info.IsDir() {
-						color.Yellow("+ new path detected: %s", event.Name)
 						watcher.Add(event.Name) // Watch new folder
 						return
 					}
 
-					color.Green("+ %s", event.Name)
 					s.cfg.eventBus.Publish(string(FileCreated), event.Name)
 				}
 
 				if event.Has(fsnotify.Write) {
-					color.Blue("+ %s", event.Name)
 					s.cfg.eventBus.Publish(string(FileUpdated), event.Name)
 				}
 
 				if event.Has(fsnotify.Remove) {
-					color.Blue("- %s", event.Name)
 					s.cfg.eventBus.Publish(string(FileDeleted), event.Name)
 				}
-			case err, ok := <-watcher.Errors:
+			case _, ok := <-watcher.Errors:
 				if !ok {
 					return
 				}
-				color.Red("%s", err)
 			}
 		}
 	}()

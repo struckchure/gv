@@ -4,6 +4,7 @@ go 1.24.1
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.2
+	github.com/evanw/esbuild v0.25.2
 	github.com/fatih/color v1.18.0
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/go-resty/resty/v2 v2.16.5

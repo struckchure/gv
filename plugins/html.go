@@ -21,7 +21,7 @@ type HTMLPlugin struct {
 }
 
 func (f *HTMLPlugin) Name() string {
-	return "html-router"
+	return "gv/html-plugin"
 }
 
 // Initialize with default values if needed

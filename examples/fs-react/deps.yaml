@@ -1,0 +1,5 @@
+packages:
+  - name: react
+    url: https://esm.sh/react@19.1.0
+  - name: react-router
+    url: https://esm.sh/react-router@7.5.0
