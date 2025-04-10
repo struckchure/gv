@@ -10,7 +10,7 @@ import (
 
 func main() {
 	plugins := []gv.Plugin{
-		&plugins.ReactPlugin{RootDir: "./", DistDir: "./dist"},
+		&plugins.ReactBabelPlugin{RootDir: "./", DistDir: "./dist"},
 	}
 
 	srv := gv.NewServer(gv.ServerConfig{

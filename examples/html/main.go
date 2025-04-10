@@ -7,7 +7,7 @@ import (
 
 func main() {
 	plugins := []gv.Plugin{
-		&plugins.HTMLPlugin{RootDir: ".", ChildrenSelector: "#children"},
+		&plugins.HTMLPlugin{RootDir: ".", ChildrenSelector: "div#children"},
 	}
 
 	srv := gv.NewServer(gv.ServerConfig{
