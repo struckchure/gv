@@ -7,14 +7,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var rootCmd = &cobra.Command{Use: "gv"}
+
 func main() {
-	// Root command
-	var rootCmd = &cobra.Command{Use: "gv"}
-
-	// Add the 'add' command to root command
-	rootCmd.AddCommand(addCommand)
-
-	// Execute the root command
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
