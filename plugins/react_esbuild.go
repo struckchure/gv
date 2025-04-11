@@ -13,27 +13,22 @@ import (
 
 type ReactEsBuildPlugin struct {
 	gv.PluginBase
-	RootDir string
-	DistDir string
+	RootDir     string
+	DistDir     string
+	EntryPoints []string
 }
 
 var extensions = []string{".jsx", ".js", ".tsx", ".ts"}
 
 func (f *ReactEsBuildPlugin) transpileDirectory() error {
 	result := api.Build(api.BuildOptions{
-		EntryPoints: []string{
-			"./*.tsx", "./*.jsx", "./*.ts", "./*.js",
-			"./routes/**/*.tsx",
-			"./routes/**/*.ts",
-			"./routes/**/*.jsx",
-			"./routes/**/*.js",
-		},
-		Outdir:   "dist",
-		External: []string{"*"},
-		Bundle:   true,
-		Write:    true,
-		LogLevel: api.LogLevelInfo,
-		Format:   api.FormatESModule,
+		EntryPoints: f.EntryPoints,
+		Outdir:      "dist",
+		External:    []string{"*"},
+		Bundle:      true,
+		Write:       true,
+		LogLevel:    api.LogLevelInfo,
+		Format:      api.FormatESModule,
 		Banner: map[string]string{
 			"js": `import React from "react";`,
 		},
@@ -46,7 +41,7 @@ func (f *ReactEsBuildPlugin) transpileDirectory() error {
 	return nil
 }
 
-func (f *ReactEsBuildPlugin) transpileFile(path, inputDir, outputDir string) error {
+func (f *ReactEsBuildPlugin) transpileFile(path, outputDir string) error {
 	result := api.Build(api.BuildOptions{
 		EntryPoints: []string{path},
 		Outdir:      outputDir,
@@ -107,5 +102,5 @@ func (f *ReactEsBuildPlugin) HandleHotUpdate(file string) error {
 		return nil
 	}
 
-	return f.transpileFile(file, filepath.Dir(file), filepath.Join(f.DistDir, filepath.Dir(file)))
+	return f.transpileFile(file, filepath.Join(f.DistDir, filepath.Dir(file)))
 }
