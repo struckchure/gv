@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default version
-DEFAULT_VERSION="v0.0.1"
+DEFAULT_VERSION="v0.0.2"
 
 # Get the version from the command line argument or use default
 VERSION=${1:-$DEFAULT_VERSION}
