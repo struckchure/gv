@@ -143,8 +143,7 @@ func downloadFromDir(client *resty.Client, dir, outputDir string) error {
 
 func remoteTemplate(projectRoot, template string) error {
 	client := resty.New().
-		SetBaseURL(lo.Must(url.JoinPath(TEMPLATE_REMOTE_BASE, TEMPLATE_ROOT))).
-		SetQueryParam("ref", "gh/issue-11")
+		SetBaseURL(lo.Must(url.JoinPath(TEMPLATE_REMOTE_BASE, TEMPLATE_ROOT)))
 
 	return downloadFromDir(client, template, projectRoot)
 }
