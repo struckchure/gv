@@ -19,7 +19,7 @@ We should be able to use JavaScript frameworks, without 'node' or any runtime, j
 - [x] Native ESM support in modern browsers
 - [x] CDN-based module fetching (e.g., `esm.sh`, `skypack`)
 - [ ] Local caching of remote modules
-- [ ] Hot Module Replacement (HMR)
+- [x] Hot Module Replacement (HMR)
 - [x] Zero-config dev server
 - [x] `esbuild`-based transpilation
 - [x] `babel`-based transpilation

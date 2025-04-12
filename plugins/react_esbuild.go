@@ -18,7 +18,7 @@ type ReactEsBuildPlugin struct {
 	EntryPoints []string
 }
 
-var extensions = []string{".jsx", ".js", ".tsx", ".ts"}
+var extensions = []string{".jsx", ".js", ".tsx", ".ts", ".css"}
 
 func (f *ReactEsBuildPlugin) transpileDirectory() error {
 	result := api.Build(api.BuildOptions{
@@ -42,9 +42,14 @@ func (f *ReactEsBuildPlugin) transpileDirectory() error {
 }
 
 func (f *ReactEsBuildPlugin) transpileFile(path, outputDir string) error {
+	ext := filepath.Ext(path)
+	if lo.Contains([]string{".tsx", ".jsx", ".ts", ".js"}, ext) {
+		path = strings.Replace(filepath.Base(path), filepath.Ext(path), ".js", 1)
+	}
+
 	result := api.Build(api.BuildOptions{
 		EntryPoints: []string{path},
-		Outdir:      outputDir,
+		Outfile:     filepath.Join(outputDir, path),
 		External:    []string{"*"},
 		Bundle:      true,
 		Write:       true,
@@ -75,12 +80,6 @@ func (f *ReactEsBuildPlugin) ResolveId(ctx *gv.Context, id, importer string) (*g
 }
 
 func (f *ReactEsBuildPlugin) Load(ctx *gv.Context, fullPath string) (*gv.LoadResult, error) {
-	// Initialize plugin if needed
-	err := f.transpileDirectory()
-	if err != nil {
-		return nil, err
-	}
-
 	rootHtml, err := os.ReadFile("./index.html")
 	if err != nil {
 		return nil, err
@@ -103,4 +102,8 @@ func (f *ReactEsBuildPlugin) HandleHotUpdate(file string) error {
 	}
 
 	return f.transpileFile(file, filepath.Join(f.DistDir, filepath.Dir(file)))
+}
+
+func (f *ReactEsBuildPlugin) SendNotification(file string) bool {
+	return strings.HasPrefix(filepath.Clean(file), filepath.Clean(f.DistDir))
 }

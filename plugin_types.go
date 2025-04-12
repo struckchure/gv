@@ -39,6 +39,8 @@ type Plugin interface {
 
 	// Called during dev HMR updates
 	HandleHotUpdate(filePath string) error
+
+	SendNotification(file string) bool
 }
 
 type PluginBase struct{}
@@ -65,4 +67,8 @@ func (p *PluginBase) Transform(ctx *Context, code, id string) (*TransformResult,
 
 func (p *PluginBase) HandleHotUpdate(file string) error {
 	return nil
+}
+
+func (p *PluginBase) SendNotification(file string) bool {
+	return true
 }

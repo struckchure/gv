@@ -16,6 +16,7 @@ func main() {
 			EntryPoints: []string{"./**/*.tsx", "index.css"},
 		},
 		&plugins.CdnDepencyPlugin{DepsYaml: "./deps.yaml"},
+		&plugins.HMRPlugin{},
 	}
 
 	srv := gv.NewServer(gv.ServerConfig{

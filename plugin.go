@@ -58,3 +58,14 @@ func (pc *PluginContainer) HandleHotUpdate(file string) error {
 	}
 	return nil
 }
+
+func (pc *PluginContainer) SendNotification(file string) bool {
+	for _, plugin := range pc.plugins {
+		ok := plugin.SendNotification(file)
+		if !ok {
+			return false
+		}
+	}
+
+	return true
+}
