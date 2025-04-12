@@ -71,7 +71,7 @@ type PackageMeta struct {
 	TypeScriptVersion string                         `json:"typeScriptVersion"`
 }
 
-func (m *Manager) Install(pkg string) error {
+func (m *Manager) install(pkg string) error {
 	pkgInfo := &PackageMeta{}
 	pkgInfoRequest, err := client.R().
 		SetResult(pkgInfo).
@@ -121,6 +121,23 @@ func (m *Manager) Install(pkg string) error {
 	if err != nil {
 		return err
 	}
+
+	return nil
+}
+
+func (m *Manager) Install(pkgs ...string) error {
+	var wg sync.WaitGroup
+	for _, pkg := range pkgs {
+		wg.Add(1)
+		go func(p string) {
+			defer wg.Done()
+			if err := m.install(pkg); err != nil {
+				color.Red("❌ Error installing %s: %v\n", p, err)
+			}
+		}(pkg)
+	}
+
+	wg.Wait()
 
 	return nil
 }
