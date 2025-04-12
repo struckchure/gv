@@ -26,20 +26,20 @@ jobs:
 
       - name: Update version in PowerShell install script
         run: |
-          sed -i "s/\$DefaultVersion = \".*\"/\$DefaultVersion = \"${LATEST_TAG}\"/" install.ps1
-          echo "Updated version in install.ps1 to ${LATEST_TAG}"
+          sed -i "s/\$DefaultVersion = \".*\"/\$DefaultVersion = \"${LATEST_TAG}\"/" scripts/install.ps1
+          echo "Updated version in scripts/install.ps1 to ${LATEST_TAG}"
 
       - name: Update version in Bash install script
         run: |
-          sed -i "s/DEFAULT_VERSION=\".*\"/DEFAULT_VERSION=\"${LATEST_TAG}\"/" install.sh
-          echo "Updated version in install.sh to ${LATEST_TAG}"
+          sed -i "s/DEFAULT_VERSION=\".*\"/DEFAULT_VERSION=\"${LATEST_TAG}\"/" scripts/install.sh
+          echo "Updated version in scripts/install.sh to ${LATEST_TAG}"
 
       - name: Commit and push changes
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add install.ps1 install.sh
+          git add scripts/install.ps1 scripts/install.sh
 
           # Only commit if there are changes
           if git diff --staged --quiet; then
