@@ -6,7 +6,6 @@
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
 
-project_name: gv
 version: 2
 
 before:
@@ -15,7 +14,7 @@ before:
     - go mod tidy
 
 builds:
-  - main: ./cmd/main.go
+  - main: ./cmd/
     env:
       - CGO_ENABLED=0
     goos:

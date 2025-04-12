@@ -12,7 +12,7 @@ var (
 	buildDate = "unknown"
 )
 
-var versionCmd = &cobra.Command{
+var VersionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version number",
 	Long:  `All software has versions. This is the version of your application.`,
@@ -22,5 +22,5 @@ var versionCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(VersionCmd)
 }
