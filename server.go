@@ -1,6 +1,7 @@
 package gv
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,10 +9,12 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/fatih/color"
 	"github.com/fsnotify/fsnotify"
 	"github.com/labstack/echo/v4"
+	"golang.org/x/net/websocket"
 )
 
 type Server struct {
@@ -44,23 +47,72 @@ func (s *Server) setupRoutes() {
 
 	eventChan := s.cfg.eventBus.Subscribe(string(FileUpdated))
 	done := make(chan struct{})
-	go func() {
-		defer close(done)
-		for {
-			select {
-			case msg, ok := <-eventChan:
-				if !ok {
-					return // Channel closed, exit goroutine
-				}
 
-				if err := s.pluginContainer.HandleHotUpdate(msg); err != nil {
-					log.Println(err)
+	type hmrPayload struct {
+		Type string `json:"type"`
+		File string `json:"file"`
+	}
+
+	s.e.GET("/_/ws/", func(c echo.Context) error {
+		websocket.Handler(func(ws *websocket.Conn) {
+			defer ws.Close()
+			defer close(done)
+
+			// Ping/Pong mechanism
+			go func() {
+				ticker := time.NewTicker(10 * time.Second) // Ping interval
+				defer ticker.Stop()
+
+				for {
+					select {
+					case <-ticker.C:
+						// Send a Ping frame to the client
+						if err := websocket.JSON.Send(ws, map[string]string{"type": "ping"}); err != nil {
+							c.Logger().Error("Failed to send ping:", err)
+							return // Exit the goroutine on error (likely client disconnected)
+						}
+						c.Logger().Info("Sent ping to client")
+
+					case <-done:
+						return
+					}
 				}
-			case <-done:
-				return
+			}()
+
+			for {
+				select {
+				case file, ok := <-eventChan:
+					if !ok {
+						return // Channel closed, exit goroutine
+					}
+
+					if err := s.pluginContainer.HandleHotUpdate(file); err != nil {
+						return
+					}
+
+					shouldNotify := s.pluginContainer.SendNotification(file)
+					if shouldNotify {
+						payload, err := json.Marshal(&hmrPayload{
+							Type: fmt.Sprintf("%s:update", strings.Replace(filepath.Ext(file), ".", "", 1)),
+							File: filepath.Join("/", file),
+						})
+						if err != nil {
+							c.Logger().Error(err)
+							return
+						}
+						err = websocket.Message.Send(ws, string(payload))
+						if err != nil {
+							c.Logger().Error(err)
+						}
+					}
+				case <-done:
+					return
+				}
 			}
-		}
-	}()
+		}).ServeHTTP(c.Response(), c.Request())
+
+		return nil
+	})
 
 	s.e.GET("/*", func(c echo.Context) error {
 		requestPath := c.Request().URL.Path
