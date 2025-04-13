@@ -1,0 +1,91 @@
+* {
+  border: 0;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: rgb(19, 19, 66);
+  color: white;
+}
+
+div#root {
+  width: 100%;
+  height: 100%;
+}
+
+main {
+  display: grid;
+  place-content: center;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+main h4 {
+  text-align: center;
+  color: white;
+  padding: 4px 6px;
+  background-color: blue;
+  width: 100%;
+}
+
+form {
+  margin-bottom: 4px;
+}
+
+input,
+button {
+  border: 1px solid black;
+  padding: 4px 6px;
+  width: fit-content;
+}
+
+form input {
+  width: 100%;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.todo-item,
+form {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  width: 100%;
+  background-color: aliceblue;
+  color: black;
+  padding: 2px;
+}
+
+.todo-item:hover,
+.todo-item *:hover {
+  cursor: pointer;
+  background-color: azure;
+}
+
+.todo-item label {
+  width: 100%;
+}
+
+button,
+label {
+  font-size: small;
+}
+
+.todo-item button {
+  margin-left: auto;
+}
