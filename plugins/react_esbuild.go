@@ -43,13 +43,14 @@ func (f *ReactEsBuildPlugin) transpileDirectory() error {
 
 func (f *ReactEsBuildPlugin) transpileFile(path, outputDir string) error {
 	ext := filepath.Ext(path)
+	outputFile := path
 	if lo.Contains([]string{".tsx", ".jsx", ".ts", ".js"}, ext) {
-		path = strings.Replace(filepath.Base(path), filepath.Ext(path), ".js", 1)
+		outputFile = strings.Replace(filepath.Base(path), filepath.Ext(path), ".js", 1)
 	}
 
 	result := api.Build(api.BuildOptions{
 		EntryPoints: []string{path},
-		Outfile:     filepath.Join(outputDir, path),
+		Outfile:     filepath.Join(outputDir, outputFile),
 		External:    []string{"*"},
 		Bundle:      true,
 		Write:       true,
