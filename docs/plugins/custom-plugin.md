@@ -1,4 +1,4 @@
-# Writing Your Own GV Plugin
+# Custom Plugin
 
 GV supports a plugin system to customize how files are resolved, loaded, transformed, and handled during development. To write your own plugin, implement the `Plugin` interface provided by GV.
 
