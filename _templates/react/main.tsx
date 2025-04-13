@@ -9,7 +9,7 @@ function App() {
       <title>GV + React</title>
 
       <main>
-        <h4>GV + React</h4>
+        <h4>GV + React +Ys</h4>
         <button onClick={() => setCount(count + 1)}>Count : {count}</button>
       </main>
     </>

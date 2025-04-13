@@ -22,16 +22,16 @@ var extensions = []string{".jsx", ".js", ".tsx", ".ts", ".css"}
 
 func (f *ReactEsBuildPlugin) transpileDirectory() error {
 	result := api.Build(api.BuildOptions{
-		EntryPoints: f.EntryPoints,
-		Outdir:      "dist",
-		External:    []string{"*"},
-		Bundle:      true,
-		Write:       true,
-		LogLevel:    api.LogLevelInfo,
-		Format:      api.FormatESModule,
-		Banner: map[string]string{
-			"js": `import React from "react";`,
-		},
+		EntryPoints:       f.EntryPoints,
+		Outdir:            "dist",
+		External:          []string{"*"},
+		Bundle:            true,
+		Write:             true,
+		LogLevel:          api.LogLevelInfo,
+		Format:            api.FormatESModule,
+		MinifySyntax:      true,
+		MinifyWhitespace:  true,
+		MinifyIdentifiers: true,
 	})
 
 	if len(result.Errors) > 0 {
@@ -49,16 +49,16 @@ func (f *ReactEsBuildPlugin) transpileFile(path, outputDir string) error {
 	}
 
 	result := api.Build(api.BuildOptions{
-		EntryPoints: []string{path},
-		Outfile:     filepath.Join(outputDir, outputFile),
-		External:    []string{"*"},
-		Bundle:      true,
-		Write:       true,
-		LogLevel:    api.LogLevelInfo,
-		Format:      api.FormatESModule,
-		Banner: map[string]string{
-			"js": `import React from "react";`,
-		},
+		EntryPoints:       []string{path},
+		Outfile:           filepath.Join(outputDir, outputFile),
+		External:          []string{"*"},
+		Bundle:            true,
+		Write:             true,
+		LogLevel:          api.LogLevelInfo,
+		Format:            api.FormatESModule,
+		MinifySyntax:      true,
+		MinifyWhitespace:  true,
+		MinifyIdentifiers: true,
 	})
 
 	if len(result.Errors) > 0 {

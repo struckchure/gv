@@ -9,7 +9,6 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/fatih/color"
 	"github.com/fsnotify/fsnotify"
@@ -59,25 +58,25 @@ func (s *Server) setupRoutes() {
 			defer close(done)
 
 			// Ping/Pong mechanism
-			go func() {
-				ticker := time.NewTicker(10 * time.Second) // Ping interval
-				defer ticker.Stop()
+			// go func() {
+			// 	ticker := time.NewTicker(10 * time.Second) // Ping interval
+			// 	defer ticker.Stop()
 
-				for {
-					select {
-					case <-ticker.C:
-						// Send a Ping frame to the client
-						if err := websocket.JSON.Send(ws, map[string]string{"type": "ping"}); err != nil {
-							c.Logger().Error("Failed to send ping:", err)
-							return // Exit the goroutine on error (likely client disconnected)
-						}
-						c.Logger().Info("Sent ping to client")
+			// 	for {
+			// 		select {
+			// 		case <-ticker.C:
+			// 			// Send a Ping frame to the client
+			// 			if err := websocket.JSON.Send(ws, map[string]string{"type": "ping"}); err != nil {
+			// 				c.Logger().Error("Failed to send ping:", err)
+			// 				return // Exit the goroutine on error (likely client disconnected)
+			// 			}
+			// 			c.Logger().Info("Sent ping to client")
 
-					case <-done:
-						return
-					}
-				}
-			}()
+			// 		case <-done:
+			// 			return
+			// 		}
+			// 	}
+			// }()
 
 			for {
 				select {
