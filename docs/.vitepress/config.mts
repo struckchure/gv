@@ -4,6 +4,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "GV",
   description: "Golang Build tool for Modern Web Frameworks",
+  base: "/gv", // TODO: change to "/" in dev
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     sidebar: [
