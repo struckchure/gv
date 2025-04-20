@@ -160,9 +160,9 @@ func (f *HTMLPlugin) Load(ctx *gv.Context, id string) (*gv.LoadResult, error) {
 	// Check for @page.html override in the current directory
 	pageDir := filepath.Dir(fullPath)
 	overridePagePath := filepath.Join(pageDir, "@page.html")
-	if _, err := os.Stat(overridePagePath); err == nil {
+	if _, err = os.Stat(overridePagePath); err == nil {
 		// Use override and skip all layouts
-		if err := f.applyDirectContent(overridePagePath, &contents); err != nil {
+		if err = f.applyDirectContent(overridePagePath, &contents); err != nil {
 			return nil, err
 		}
 		return &gv.LoadResult{
