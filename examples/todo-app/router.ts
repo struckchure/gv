@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router";
 
-import RootLayout from "./pages/layout.js";
-import Root, { loader as RootLoad } from "./pages/page.js";
+import RootLayout from "./pages/layout";
+import Root, { loader as RootLoad } from "./pages/page";
 
 export let router = createBrowserRouter([
   {

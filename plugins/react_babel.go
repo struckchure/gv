@@ -90,7 +90,7 @@ func (f *ReactBabelPlugin) buildJSX(path, inputDir, outputDir string) error {
 	jsOutputPath := filepath.Join(outputDir, strings.TrimSuffix(relPath, ".jsx")+".js")
 
 	// Create the parent directory if it doesn’t exist
-	if err := os.MkdirAll(filepath.Dir(jsOutputPath), 0755); err != nil {
+	if err = os.MkdirAll(filepath.Dir(jsOutputPath), 0755); err != nil {
 		return err
 	}
 
