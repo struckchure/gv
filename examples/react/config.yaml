@@ -1,0 +1,15 @@
+packages:
+  - name: react
+    url: https://esm.sh/react@19.1.0
+  - name: react-dom
+    url: https://esm.sh/react-dom@19.1.0
+  - name: react-dom/client
+    url: https://esm.sh/react-dom@19.1.0/client
+  - name: react-router
+    url: https://esm.sh/react-router@7.5.0
+  - name: react/jsx-runtime
+    url: https://esm.sh/react@19.1.0/jsx-runtime
+types:
+  - "@types/react"
+  - "@types/react-dom"
+  - "react-router"

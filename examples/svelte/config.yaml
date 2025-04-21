@@ -1,0 +1,9 @@
+packages:
+  - name: svelte
+    url: https://cdn.skypack.dev/svelte@4.2.19?min
+  - name: svelte/internal
+    url: https://cdn.skypack.dev/svelte@4.2.19/internal?min
+  - name: svelte/internal/disclose-version
+    url: https://cdn.skypack.dev/svelte@4.2.19/internal/disclose-version?min
+types:
+  - svelte

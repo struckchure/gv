@@ -4,19 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/struckchure/gv"
+	"github.com/evanw/esbuild/pkg/api"
 	"gopkg.in/yaml.v3"
 )
-
-type CdnDepencyPlugin struct {
-	gv.PluginBase
-	RootDir string
-
-	DepsYaml string
-}
 
 type CdnDependencyPackage struct {
 	Name string `yaml:"name"`
@@ -31,49 +25,56 @@ type importmap struct {
 	Imports map[string]string `json:"imports"`
 }
 
-func (f *CdnDepencyPlugin) Name() string {
-	return "gv/cdn-depency-plugin"
-}
+func CdnDependencyPlugin(depsYaml string) api.Plugin {
+	return api.Plugin{
+		Name: "cdn-dependency-plugin",
+		Setup: func(build api.PluginBuild) {
+			build.OnLoad(api.OnLoadOptions{Filter: `\.html$`}, func(args api.OnLoadArgs) (api.OnLoadResult, error) {
+				depsContent, err := os.ReadFile(depsYaml)
+				if err != nil {
+					return api.OnLoadResult{}, err
+				}
 
-func (f *CdnDepencyPlugin) Transform(ctx *gv.Context, code string, id string) (*gv.TransformResult, error) {
-	depsConfig := &CdnDependencyConfig{}
+				var depsConfig CdnDependencyConfig
+				if err := yaml.Unmarshal(depsContent, &depsConfig); err != nil {
+					return api.OnLoadResult{}, err
+				}
 
-	depsContent, err := os.ReadFile(f.DepsYaml)
-	if err != nil {
-		return nil, err
+				im := importmap{Imports: make(map[string]string)}
+				for _, pkg := range depsConfig.Packages {
+					im.Imports[pkg.Name] = pkg.URL
+				}
+
+				mapContent, err := json.Marshal(im)
+				if err != nil {
+					return api.OnLoadResult{}, err
+				}
+
+				script := fmt.Sprintf(`<script type="importmap">%s</script>`, string(mapContent))
+
+				htmlBytes, err := os.ReadFile(args.Path)
+				if err != nil {
+					return api.OnLoadResult{}, err
+				}
+
+				doc, err := goquery.NewDocumentFromReader(strings.NewReader(string(htmlBytes)))
+				if err != nil {
+					return api.OnLoadResult{}, err
+				}
+
+				doc.Find("body").PrependHtml(script)
+
+				finalHTML, err := doc.Html()
+				if err != nil {
+					return api.OnLoadResult{}, err
+				}
+
+				return api.OnLoadResult{
+					Contents:   &finalHTML,
+					Loader:     api.LoaderCopy,
+					ResolveDir: filepath.Dir(args.Path),
+				}, nil
+			})
+		},
 	}
-
-	err = yaml.Unmarshal(depsContent, &depsConfig)
-	if err != nil {
-		return nil, err
-	}
-
-	im := importmap{
-		Imports: map[string]string{},
-	}
-
-	for _, pkg := range depsConfig.Packages {
-		im.Imports[pkg.Name] = pkg.URL
-	}
-
-	content, err := json.Marshal(&im)
-	if err != nil {
-		return nil, err
-	}
-
-	script := fmt.Sprintf(`<script type="importmap">%s</script>`, string(content))
-
-	doc, err := goquery.NewDocumentFromReader(strings.NewReader(code))
-	if err != nil {
-		return nil, err
-	}
-
-	doc.Find("body").PrependHtml(script)
-
-	code, err = doc.Html()
-	if err != nil {
-		return nil, err
-	}
-
-	return &gv.TransformResult{Code: code}, nil
 }

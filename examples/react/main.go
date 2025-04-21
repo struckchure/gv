@@ -2,26 +2,34 @@ package main
 
 import (
 	"log"
+	"os"
+	"path/filepath"
 
-	"github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/samber/lo"
 	"github.com/struckchure/gv"
-	"github.com/struckchure/gv/plugins"
 )
 
 func main() {
-	plugins := []gv.Plugin{
-		&plugins.ReactBabelPlugin{RootDir: "./", DistDir: "./dist"},
-	}
-
 	srv := gv.NewServer(gv.ServerConfig{
-		Host:        "localhost",
-		Port:        3000,
-		Plugins:     plugins,
-		EnableWatch: true,
+		Host: "localhost",
+		Port: 3000,
+
+		EsBuildOptions: EsbuildOptions,
 	})
 
-	group := srv.Server().Group("dist")
-	group.Use(middleware.Static("./dist"))
+	e := srv.Server()
+
+	e.GET("/*", func(c echo.Context) error {
+		content, err := os.ReadFile(filepath.Join(lo.Must(os.Getwd()), "/dist/index.html"))
+		if err != nil {
+			return err
+		}
+
+		return c.HTML(200, string(content))
+	})
+	g := e.Group("/dist")
+	g.Static("/", "dist")
 
 	log.Fatal(srv.Start())
 }
