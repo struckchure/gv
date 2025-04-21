@@ -3,35 +3,38 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/samber/lo"
 	"github.com/struckchure/gv"
 	index "github.com/struckchure/gv/examples/todo-app/pages"
-	"github.com/struckchure/gv/plugins"
 )
 
 func main() {
-	plugins := []gv.Plugin{
-		&plugins.ReactEsBuildPlugin{
-			RootDir:     "./",
-			DistDir:     "./dist",
-			EntryPoints: []string{"./**/*.tsx", "./*.ts", "./styles/**/*.css"},
-		},
-		&plugins.CdnDepencyPlugin{DepsYaml: "./deps.yaml"},
-		&plugins.HMRPlugin{},
-	}
-
 	srv := gv.NewServer(gv.ServerConfig{
-		Host:        "localhost",
-		Port:        3000,
-		Plugins:     plugins,
-		EnableWatch: true,
+		Host: "localhost",
+		Port: 3000,
+
+		EsBuildOptions: EsbuildOptions,
 	})
 
-	group := srv.Server().Group("dist")
-	group.Use(middleware.Static("./dist"))
+	e := srv.Server()
 
-	api := srv.Server().Group("api")
+	e.GET("/*", func(c echo.Context) error {
+		content, err := os.ReadFile(filepath.Join(lo.Must(os.Getwd()), "/dist/index.html"))
+		if err != nil {
+			return err
+		}
+
+		return c.HTML(200, string(content))
+	})
+	g := e.Group("/dist")
+	g.Static("/", "dist")
+
+	api := e.Group("api")
 	api.Use(middleware.AddTrailingSlashWithConfig(middleware.TrailingSlashConfig{
 		RedirectCode: http.StatusMovedPermanently,
 	}))
