@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/evanw/esbuild/pkg/api"
+	"github.com/struckchure/gv"
 	"github.com/struckchure/gv/plugins"
 )
 
@@ -14,9 +15,21 @@ var EsbuildOptions = api.BuildOptions{
 	},
 	Outdir:   "./dist",
 	External: []string{"*"},
-	Plugins:  []api.Plugin{plugins.CdnDependencyPlugin("./config.yaml")},
-	Format:   api.FormatESModule,
-	JSX:      api.JSXAutomatic,
+	Plugins: []api.Plugin{
+		gv.NewContainerPlugin(`.+$`).
+			Setup(
+				plugins.CdnDependencyPlugin("./config.yaml"),
+				plugins.JsResolver,
+			).
+			WithHmr(gv.HmrOptions{
+				RootHtml:          "./index.html",
+				WatchPath:         ".",
+				WatchExcludePaths: []string{"dist"},
+			}).
+			Compose(),
+	},
+	Format: api.FormatESModule,
+	JSX:    api.JSXAutomatic,
 
 	Bundle:            true,
 	Write:             true,

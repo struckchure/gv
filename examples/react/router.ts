@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router";
 
-import RootLayout from "./routes/layout.js";
-import Login from "./routes/login/page.js";
-import Root from "./routes/page.js";
-import Register from "./routes/register/page.js";
+import RootLayout from "./routes/layout";
+import Login from "./routes/login/page";
+import Root from "./routes/page";
+import Register from "./routes/register/page";
 
 export let router = createBrowserRouter([
   {

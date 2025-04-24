@@ -1,35 +1,31 @@
 package main
 
 import (
+	"embed"
 	"log"
-	"os"
-	"path/filepath"
 
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/samber/lo"
 	"github.com/struckchure/gv"
 )
+
+//go:embed dist
+var _ embed.FS
 
 func main() {
 	srv := gv.NewServer(gv.ServerConfig{
 		Host: "localhost",
 		Port: 3000,
 
-		EsBuildOptions: EsbuildOptions,
+		EsBuildOptions:    EsbuildOptions,
+		WatchPath:         lo.ToPtr("./"),
+		WatchExcludePaths: &[]string{"dist"},
 	})
 
-	e := srv.Server()
-
-	e.GET("/*", func(c echo.Context) error {
-		content, err := os.ReadFile(filepath.Join(lo.Must(os.Getwd()), "/dist/index.html"))
-		if err != nil {
-			return err
-		}
-
-		return c.HTML(200, string(content))
-	})
-	g := e.Group("/dist")
-	g.Static("/", "dist")
+	srv.Server().Use(middleware.StaticWithConfig(middleware.StaticConfig{
+		HTML5: true,
+		Root:  "dist",
+	}))
 
 	log.Fatal(srv.Start())
 }
