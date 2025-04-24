@@ -1,12 +1,25 @@
 package plugins
 
 import (
+	"path/filepath"
+	"strings"
+
 	"github.com/evanw/esbuild/pkg/api"
+	"github.com/struckchure/gv"
 )
 
-func JsResolver() api.Plugin {
-	return api.Plugin{
-		Name:  "js-resolver",
-		Setup: func(build api.PluginBuild) {},
-	}
+// TODO: resolve default to `index.js` if exists
+// e.g import Mod from "./page"; // where `page` dir has index.js
+func JsResolver(cp *gv.ContainerPlugin) {
+	cp.OnResolve("js-resolver", `.+`, func(args api.OnResolveArgs) (api.OnResolveResult, error) {
+		ext := filepath.Ext(args.Path)
+		if strings.HasPrefix(args.Path, ".") && ext != ".js" {
+			args.Path += ".js"
+		}
+
+		return api.OnResolveResult{
+			Path:     args.Path,
+			External: true,
+		}, nil
+	})
 }

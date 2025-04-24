@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/evanw/esbuild/pkg/api"
+	"github.com/struckchure/gv"
 	"gopkg.in/yaml.v3"
 )
 
@@ -25,56 +25,67 @@ type importmap struct {
 	Imports map[string]string `json:"imports"`
 }
 
-func CdnDependencyPlugin(depsYaml string) api.Plugin {
-	return api.Plugin{
-		Name: "cdn-dependency-plugin",
-		Setup: func(build api.PluginBuild) {
-			build.OnLoad(api.OnLoadOptions{Filter: `\.html$`}, func(args api.OnLoadArgs) (api.OnLoadResult, error) {
-				depsContent, err := os.ReadFile(depsYaml)
-				if err != nil {
-					return api.OnLoadResult{}, err
-				}
+func CdnDependencyPlugin(depsYaml string) func(*gv.ContainerPlugin) {
+	onLoad := func(args api.OnLoadArgs) (api.OnLoadResult, error) {
+		depsContent, err := os.ReadFile(depsYaml)
+		if err != nil {
+			return api.OnLoadResult{}, err
+		}
 
-				var depsConfig CdnDependencyConfig
-				if err := yaml.Unmarshal(depsContent, &depsConfig); err != nil {
-					return api.OnLoadResult{}, err
-				}
+		var depsConfig CdnDependencyConfig
+		if err := yaml.Unmarshal(depsContent, &depsConfig); err != nil {
+			return api.OnLoadResult{}, err
+		}
 
-				im := importmap{Imports: make(map[string]string)}
-				for _, pkg := range depsConfig.Packages {
-					im.Imports[pkg.Name] = pkg.URL
-				}
+		im := importmap{Imports: make(map[string]string)}
+		for _, pkg := range depsConfig.Packages {
+			im.Imports[pkg.Name] = pkg.URL
+		}
 
-				mapContent, err := json.Marshal(im)
-				if err != nil {
-					return api.OnLoadResult{}, err
-				}
+		mapContent, err := json.Marshal(im)
+		if err != nil {
+			return api.OnLoadResult{}, err
+		}
 
-				script := fmt.Sprintf(`<script type="importmap">%s</script>`, string(mapContent))
+		script := fmt.Sprintf(`<script type="importmap">%s</script>`, string(mapContent))
 
-				htmlBytes, err := os.ReadFile(args.Path)
-				if err != nil {
-					return api.OnLoadResult{}, err
-				}
+		var content string
 
-				doc, err := goquery.NewDocumentFromReader(strings.NewReader(string(htmlBytes)))
-				if err != nil {
-					return api.OnLoadResult{}, err
-				}
+		if args.PluginData != nil {
+			previousContent, ok := args.PluginData.(api.OnLoadResult)
+			if ok {
+				content = *previousContent.Contents
+			}
+		}
 
-				doc.Find("body").PrependHtml(script)
+		if content == "" {
+			contentByte, err := os.ReadFile(args.Path)
+			if err != nil {
+				return api.OnLoadResult{}, err
+			}
 
-				finalHTML, err := doc.Html()
-				if err != nil {
-					return api.OnLoadResult{}, err
-				}
+			content = string(contentByte)
+		}
 
-				return api.OnLoadResult{
-					Contents:   &finalHTML,
-					Loader:     api.LoaderCopy,
-					ResolveDir: filepath.Dir(args.Path),
-				}, nil
-			})
-		},
+		doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
+		if err != nil {
+			return api.OnLoadResult{}, err
+		}
+
+		doc.Find("body").PrependHtml(script)
+
+		content, err = doc.Html()
+		if err != nil {
+			return api.OnLoadResult{}, err
+		}
+
+		return api.OnLoadResult{
+			Contents: &content,
+			Loader:   api.LoaderCopy,
+		}, nil
+	}
+
+	return func(cp *gv.ContainerPlugin) {
+		cp.OnLoad("cdn-depenency-plugin", `\.html$`, onLoad)
 	}
 }
