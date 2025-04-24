@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/evanw/esbuild/pkg/api"
+	"github.com/struckchure/gv"
 	"github.com/struckchure/gv/plugins"
 )
 
@@ -13,7 +14,14 @@ var EsbuildOptions = api.BuildOptions{
 	},
 	Outdir:   "./dist",
 	External: []string{"*"},
-	Plugins:  []api.Plugin{plugins.CdnDependencyPlugin("./config.yaml"), plugins.SveltePlugin()},
+	Plugins: []api.Plugin{
+		gv.NewContainerPlugin(`\.(html|svelte)$`).
+			Setup(
+				plugins.SveltePlugin,
+				plugins.CdnDependencyPlugin("./config.yaml"),
+			).Compose(),
+	},
+	Format: api.FormatESModule,
 
 	Bundle:            true,
 	Write:             true,
