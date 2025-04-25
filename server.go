@@ -3,6 +3,7 @@ package gv
 import (
 	"errors"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/evanw/esbuild/pkg/api"
@@ -82,8 +83,16 @@ func (s *Server) HandleHMR() error {
 }
 
 func (s *Server) Start() error {
-	if os.Getenv("GV_MODE") == "dev" {
+	mode := os.Getenv("GV_MODE")
+
+	switch mode {
+	case "dev":
 		s.Watch()
+	case "build":
+		if err := s.Build(); err != nil {
+			log.Fatal(err)
+		}
+		return nil
 	}
 
 	fmt.Println("\n" + color.GreenString("➜") + " Local: " + color.MagentaString(fmt.Sprintf("http://%s:%d", s.cfg.Host, s.cfg.Port)) + "\n")
