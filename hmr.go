@@ -149,9 +149,9 @@ func (pc *ContainerPlugin) listen() {
 }
 
 func (pc *ContainerPlugin) WithHmr(opts HmrOptions) *ContainerPlugin {
-	pc.Setup(Hmr("./index.html"))
-
 	if os.Getenv("GV_MODE") == "dev" {
+		pc.Setup(Hmr("./index.html"))
+
 		watcher, err := NewWatcher(
 			opts.WatchPath,
 			opts.WatchExcludePaths,
