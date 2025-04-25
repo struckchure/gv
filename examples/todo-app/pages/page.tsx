@@ -14,7 +14,7 @@ interface Todo {
 export async function loader(args: LoaderFunctionArgs) {
   const todos = (await (await fetch("/api/todos/")).json()) as Todo[];
 
-  return { todos: [] };
+  return { todos };
 }
 
 export default function Page() {

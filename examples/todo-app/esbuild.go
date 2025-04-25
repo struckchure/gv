@@ -22,7 +22,13 @@ var EsbuildOptions = api.BuildOptions{
 				plugins.SveltePlugin,
 				plugins.JsResolver,
 				plugins.CdnDependencyPlugin("./config.yaml"),
-			).Compose(),
+			).
+			WithHmr(gv.HmrOptions{
+				RootHtml:          "./index.html",
+				WatchPath:         ".",
+				WatchExcludePaths: []string{"./dist"},
+			}).
+			Compose(),
 	},
 	Format: api.FormatESModule,
 	JSX:    api.JSXAutomatic,

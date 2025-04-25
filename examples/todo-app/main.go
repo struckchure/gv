@@ -3,12 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
-	"path/filepath"
 
-	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/samber/lo"
 	"github.com/struckchure/gv"
 	index "github.com/struckchure/gv/examples/todo-app/pages"
 )
@@ -23,16 +19,10 @@ func main() {
 
 	e := srv.Server()
 
-	e.GET("/*", func(c echo.Context) error {
-		content, err := os.ReadFile(filepath.Join(lo.Must(os.Getwd()), "/dist/index.html"))
-		if err != nil {
-			return err
-		}
-
-		return c.HTML(200, string(content))
-	})
-	g := e.Group("/dist")
-	g.Static("/", "dist")
+	e.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+		HTML5: true,
+		Root:  "dist",
+	}))
 
 	api := e.Group("api")
 	api.Use(middleware.AddTrailingSlashWithConfig(middleware.TrailingSlashConfig{
