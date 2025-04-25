@@ -3,7 +3,6 @@ package gv
 import (
 	_ "embed"
 
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -136,13 +135,7 @@ func (pc *ContainerPlugin) listen() {
 					return
 				}
 
-				cbPayload, err := json.Marshal(res)
-				if err != nil {
-					color.Yellow(err.Error())
-					return
-				}
-
-				HmrClientBroadcast <- string(cbPayload)
+				HmrClientBroadcast <- *res
 			}()
 		}
 	}

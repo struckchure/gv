@@ -8,8 +8,8 @@ import (
 
 	"github.com/evanw/esbuild/pkg/api"
 	"github.com/fatih/color"
+	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
-	"golang.org/x/net/websocket"
 )
 
 type Server struct {
@@ -52,29 +52,31 @@ func (s *Server) Server() *echo.Echo {
 	return s.e
 }
 
-var HmrClientBroadcast = make(chan string)
+var HmrClientBroadcast = make(chan HmrResult)
 
 func (s *Server) HandleHMR() error {
 	color.Magenta("[HMR] Wating for client to connect ...")
 
+	var upgrader = websocket.Upgrader{}
+
 	handler := func(c echo.Context) error {
 		// Upgrade connection to WebSocket
-		websocket.Handler(func(ws *websocket.Conn) {
-			if ws.IsClientConn() {
-				color.Magenta("[HMR] Client connected")
-			}
+		ws, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
+		if err != nil {
+			return err
+		}
+		defer ws.Close()
 
-			defer ws.Close()
+		color.Green("[HMR] Client connected")
 
+		for {
 			for payload := range HmrClientBroadcast {
-				if err := websocket.Message.Send(ws, payload); err != nil {
+				if err := ws.WriteJSON(payload); err != nil {
 					c.Logger().Error("WebSocket broadcast error:", err)
 					continue
 				}
 			}
-		}).ServeHTTP(c.Response(), c.Request())
-
-		return nil
+		}
 	}
 
 	s.e.GET("/__hmr__", handler)
@@ -110,6 +112,10 @@ type ServerConfig struct {
 }
 
 func NewServer(cfg ServerConfig) *Server {
+	if os.Getenv("GV_MODE") == "" {
+		os.Setenv("GV_MODE", "dev")
+	}
+
 	e := echo.New()
 	e.HideBanner = true
 	e.HidePort = true
