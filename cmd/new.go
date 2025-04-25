@@ -35,7 +35,6 @@ var newCommand = &cobra.Command{
 		answers := newAnswers{}
 		templateOptions := []string{
 			"Blank",
-			"HTML File Router",
 			"React",
 			"Vue",
 			"Svelte",

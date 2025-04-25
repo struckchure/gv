@@ -1,4 +1,3 @@
-types/**/*.d.ts
-types/**/package.json
 dist
-.DS_Store
+**/*.d.ts
+**/package.json

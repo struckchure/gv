@@ -1,19 +1,8 @@
-import { useState } from "react";
 import { createRoot } from "react-dom/client";
+import { RouterProvider } from "react-router";
 
-function App() {
-  const [count, setCount] = useState(0);
+import { router } from "./router";
 
-  return (
-    <>
-      <title>GV + React</title>
-
-      <main>
-        <h4>GV + React +Ys</h4>
-        <button onClick={() => setCount(count + 1)}>Count : {count}</button>
-      </main>
-    </>
-  );
-}
-
-createRoot(document.querySelector("#root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(
+  <RouterProvider router={router} />
+);

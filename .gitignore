@@ -2,4 +2,4 @@
 
 dist/
 
-_templates/go.*
+_templates/**/go.*
