@@ -50,13 +50,13 @@ changelog:
       - "^test:"
   groups:
     - title: Features
-      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      regexp: '^.*?feat(\([a-zA-Z0-9_-]+\))??!?:.+$'
       order: 0
     - title: "Bug fixes"
-      regexp: '^.*?(bug|fix)(\([[:word:]]+\))??!?:.+$'
+      regexp: '^.*?(bug|fix)(\([a-zA-Z0-9_-]+\))??!?:.+$'
       order: 1
     - title: "Docs"
-      regexp: '^.*?(doc|docs)(\([[:word:]]+\))??!?:.+$'
+      regexp: '^.*?(doc|docs)(\([a-zA-Z0-9_-]+\))??!?:.+$'
       order: 2
     - title: Others
       order: 999
