@@ -17,13 +17,13 @@ var syncCommand = &cobra.Command{
 			return
 		}
 
-		manager := gv.NewManager()
+		manager := gv.NewManager(gv.ManagerOptions{ConfigFile: configFile})
 		manager.Sync(configFile)
 	},
 }
 
 func init() {
-	syncCommand.Flags().StringP("config", "c", "./deps.yaml", "Dependecy config file")
+	syncCommand.Flags().StringP("config", "c", "./config.yaml", "Config file")
 
 	rootCmd.AddCommand(syncCommand)
 }

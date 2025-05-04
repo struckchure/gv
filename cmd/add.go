@@ -8,17 +8,24 @@ import (
 
 var addCommand = &cobra.Command{
 	Use:   "add",
-	Short: "Download TypeScript definitions",
-	Run:   func(cmd *cobra.Command, args []string) { addService(args) },
+	Short: "Update config file package registry and install typescript definitions.",
+	Run:   addService,
 	Args:  cobra.MinimumNArgs(1),
 }
 
-func addService(pkgs []string) {
-	manager := gv.NewManager()
-	manager.Install(pkgs...)
-	color.Green("All .d.ts files downloaded!")
+func addService(cmd *cobra.Command, packages []string) {
+	configFile, err := cmd.Flags().GetString("config")
+	if err != nil {
+		color.Red(err.Error())
+		return
+	}
+
+	manager := gv.NewManager(gv.ManagerOptions{ConfigFile: configFile})
+	manager.Add(packages...)
 }
 
 func init() {
+	addCommand.Flags().StringP("config", "c", "./config.yaml", "Config file")
+
 	rootCmd.AddCommand(addCommand)
 }

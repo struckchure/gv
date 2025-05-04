@@ -21,10 +21,10 @@ func (m *Manager) Sync(depsFile string) {
 		return
 	}
 
-	if err := m.Install(config.Types...); err != nil {
+	if err := m.installTypes(config.Types...); err != nil {
 		color.Red(err.Error())
 		return
 	}
 
-	color.Green("All Dependencies are synced")
+	color.Green("Sync Complete.")
 }
