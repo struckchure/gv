@@ -1,3 +1,6 @@
+cdns:
+  - name: esm
+    url: https://esm.sh
 packages:
   - name: react
     url: https://esm.sh/react@19.1.0
@@ -8,8 +11,8 @@ packages:
   - name: react-router
     url: https://esm.sh/react-router@7.5.0
   - name: react/jsx-runtime
-    url: https://esm.sh/react@19.1.0/jsx-runtime
+    url: https://esm.sh/react/jsx-runtime
 types:
   - "@types/react"
   - "@types/react-dom"
-  - "react-router"
+  - react-router
