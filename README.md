@@ -1,114 +1,123 @@
-[Discord](https://discord.gg/DzPC7D8T)
+# ✨ GV - The Next-Gen Fullstack Web Framework ✨
 
-## 🚀 GV (Go Vite)
+GV is a blazing-fast, next-generation fullstack web framework written in Go, designed to make building modern web applications a breeze! 💨
 
-**GV** is a blazing-fast, browser-native development server and build tool written in Go. It’s inspired by [Vite](https://vitejs.dev) but designed to run without Node.js, using the power of native ESM in modern browsers and CDN-based dependency resolution.
+## 🚀 Description
 
-> ⚡ Powered by Go. 🔌 Plugin-friendly. 🧠 Node-free.
+GV combines the power of Go on the backend with the flexibility of modern frontend frameworks like React, Vue, and Svelte. With features like Hot Module Replacement (HMR), CDN dependency management, and a plugin container, GV offers a streamlined development experience that boosts productivity and performance. ⚡
 
----
+## 📦 Installation
 
-### 💎 Philosophy
+Get started with GV in just a few steps!
 
-We should be able to use JavaScript frameworks, without 'node' or any runtime, just your browser.
-
----
-
-### ✨ Features
-
-- [x] Native ESM support in modern browsers
-- [x] CDN-based module fetching (e.g., `esm.sh`, `skypack`)
-- [ ] Local caching of remote modules
-- [x] Hot Module Replacement (HMR)
-- [x] Zero-config dev server
-- [x] `esbuild`-based transpilation
-- [x] `babel`-based transpilation
-- [x] Plugin system (inspired by Vite/Rollup)
-- [x] Written in Go with extensibility in mind
-- [x] No Node.js required — ever
-- [x] TypeScript support
-- [ ] Adapter to support any http server
-
----
-
-# Installation
-
-For Linux, MacOS and Windows
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/struckchure/gv/main/scripts/install.sh | bash
-```
-
-For Windows
-
-```sh
-irm https://raw.githubusercontent.com/struckchure/gv/main/scripts/install.ps1 | iex
-```
-
----
-
-### 🔧 Getting Started
+- ⬇️ **Clone the Repository**:
 
 ```bash
-git clone https://github.com/struckchure/gv
-cd gv/examples/react
-go run .
+git clone git@github.com:struckchure/gv.git
 ```
 
-Then open your browser to [http://localhost:3000](http://localhost:3000).
+- 🛠️ **Navigate to the Project Directory**:
+
+```bash
+cd gv
+```
+
+- ✅ **Install Dependencies**:
+
+```bash
+go mod tidy
+```
+
+## 💡 Usage
+
+Here are some basic examples to get you started with GV:
+
+<details>
+<summary>➕ Adding a Dependency</summary>
+
+To add a new dependency to your project, use the `add` command:
+
+```bash
+gv add esm:react@19.1.0
+```
+
+This command updates the `config.yaml` file and installs the necessary TypeScript definitions.
+
+</details>
+
+<details>
+<summary>🔄 Syncing Dependencies</summary>
+
+To sync your project's dependencies based on the `config.yaml` file, use the `sync` command:
+
+```bash
+gv sync
+```
+
+This ensures all dependencies are installed and up-to-date.
+
+</details>
+
+<details>
+<summary>✨ Creating a New Project</summary>
+To create a new project using one of the provided templates:
+
+1.  Run the `new` command:
+
+```bash
+gv new
+```
+
+2. Follow the prompts to enter your project name, package name, and choose a template (Blank, React, Vue, Svelte).
+
+3. GV will set up the project structure and install the necessary dependencies.
+</details>
+
+## 🌟 Features
+
+- 🔥 **Hot Module Replacement (HMR)**: Automatically update your frontend without full page reloads.
+- 📦 **CDN Dependency Management**: Easily manage frontend dependencies from CDNs.
+- 🔌 **Plugin Container**: A powerful plugin system for extending GV's functionality.
+- 📝 **Automatic TypeScript Definition Generation**: Keep your frontend types in sync with your Go backend.
+- ⚡ **Blazing-Fast Performance**: Go's efficiency ensures excellent backend performance.
+- 🧩 **Flexible Frontend**: Supports React, Vue, Svelte, and more.
+
+## 🛠️ Technologies Used
+
+| Technology                      | Description        | Link                                                     |
+| :------------------------------ | :----------------- | :------------------------------------------------------- |
+| **Go**                          | Backend language   | [https://go.dev/](https://go.dev/)                       |
+| **esbuild**                     | JavaScript bundler | [https://esbuild.github.io/](https://esbuild.github.io/) |
+| **React**                       | Frontend library   | [https://react.dev/](https://react.dev/)                 |
+| **Vue**                         | Frontend framework | [https://vuejs.org/](https://vuejs.org/)                 |
+| **Svelte**                      | Frontend compiler  | [https://svelte.dev/](https://svelte.dev/)               |
+| **github.com/labstack/echo/v4** | go web framework   | https://echo.labstack.com/                               |
+
+## 🤝 Contributing
+
+We welcome contributions to GV! Here are the guidelines:
+
+- 💡 **Fork the Repository**: Create your own fork of the project.
+- 🌿 **Create a Branch**: Make your changes in a separate branch.
+- ✍️ **Commit Changes**: Add clear and concise commit messages.
+- 🧪 **Test**: Make sure tests pass.
+- 🚀 **Submit a Pull Request**: Send your changes for review.
+
+## 📜 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## 👨‍💻 Author Info
+
+- Mohammed Al-Ameen
+  - [Github](https://github.com/struckchure)
+  - [Twitter](https://twitter.com/)
+  - [LinkedIn](https://linkedin.com/)
 
 ---
 
-### 📦 How It Works
-
-- 📜 **Transpiling**: Uses `babel` internally for `.ts`, `.jsx`, `.tsx`, etc.
-- 🌐 **CDN Resolution**: Bare imports (like `react`) are rewritten to point to `https://esm.sh/react` and cached locally.
-- 🔥 **HMR**: WebSocket server pushes updates to the browser with minimal reloads.
-- 🧩 **Plugins**: Extend GV with hooks like `transform`, `resolveId`, and `load`.
-
----
-
-### 📁 Project Structure
-
-Well, your project structure can be anyhow you want, but here's a sample react project
-
-```
-.
-├── index.html
-├── main.go
-├── main.jsx
-├── router.js
-└── routes
-    ├── layout.jsx
-    ├── login
-    │   └── page.jsx
-    ├── page.jsx
-    └── register
-        └── page.jsx
-```
-
-Import from CDNs or local files directly:
-
-```jsx
-import { createRoot } from "https://esm.sh/react-dom@19.1.0/client";
-import { RouterProvider } from "https://esm.sh/react-router@7.5.0";
-import React from "https://esm.sh/react@19.1.0";
-
-import { router } from "./router.js";
-
-createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
-);
-```
-
----
-
-### 🔌 Plugin API
-
-Check [here](./docs/writing-your-own-gv-plugin.md).
-
----
-
-### 📜 License
-
-MIT © 2025 [Mohammed Al-Ameen](mailto:ameenmohammed2311@gmail.com)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/struckchure/gv)](https://go.dev/)
+[![License](https://img.shields.io/github/license/struckchure/gv)](LICENSE)
+[![Contributors](https://img.shields.io/github/contributors/struckchure/gv)](https://github.com/struckchure/gv/graphs/contributors)
+[![Last Commit](https://img.shields.io/github/last-commit/struckchure/gv)](https://github.com/struckchure/gv/commits/main)
+[![Readme was generated by Dokugen](https://img.shields.io/badge/Readme%20was%20generated%20by-Dokugen-brightgreen)](https://www.npmjs.com/package/dokugen)
