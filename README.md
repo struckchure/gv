@@ -91,7 +91,7 @@ gv new
 | **React**                       | Frontend library   | [https://react.dev/](https://react.dev/)                 |
 | **Vue**                         | Frontend framework | [https://vuejs.org/](https://vuejs.org/)                 |
 | **Svelte**                      | Frontend compiler  | [https://svelte.dev/](https://svelte.dev/)               |
-| **github.com/labstack/echo/v4** | go web framework   | https://echo.labstack.com/                               |
+| **Echo**                        | go web framework   | https://echo.labstack.com/                               |
 
 ## 🤝 Contributing
 
